@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://world001"]
+[gd_scene load_steps=13 format=3 uid="uid://world001"]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1"]
 [ext_resource type="Script" path="res://scripts/world/day_night_cycle.gd" id="2"]
@@ -7,26 +7,47 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/inventory_ui.tscn" id="5"]
 [ext_resource type="PackedScene" path="res://scenes/ui/quest_journal_ui.tscn" id="6"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="7"]
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_001"]
-size = Vector2(100, 100)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_001"]
-size = Vector3(100, 0.1, 100)
+[ext_resource type="Script" path="res://scripts/world/terrain_generator.gd" id="8"]
+[ext_resource type="Script" path="res://scripts/world/village_builder.gd" id="9"]
+[ext_resource type="Script" path="res://scripts/world/environment_scatter.gd" id="10"]
+[ext_resource type="Script" path="res://scripts/world/dungeon_entrance.gd" id="11"]
+[ext_resource type="Script" path="res://scripts/world/village_npcs.gd" id="12"]
 
 [node name="TestWorld" type="Node3D"]
 
 [node name="Player" parent="." instance=ExtResource("1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -18)
 
-[node name="Ground" type="StaticBody3D" parent="."]
-collision_layer = 1
+[node name="TerrainGenerator" type="Node3D" parent="."]
+script = ExtResource("8")
+terrain_size = Vector2(200, 200)
+max_height = 12.0
+village_center = Vector2(0, 0)
+village_radius = 30.0
+village_falloff = 15.0
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
-mesh = SubResource("PlaneMesh_001")
+[node name="Village" type="Node3D" parent="."]
+script = ExtResource("9")
+village_name = "Millhaven"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
-shape = SubResource("BoxShape3D_001")
+[node name="VillageNPCs" type="Node3D" parent="."]
+script = ExtResource("12")
+
+[node name="EnvironmentScatter" type="Node3D" parent="."]
+script = ExtResource("10")
+scatter_radius = 90.0
+seed_value = 42
+tree_count = 120
+rock_count = 80
+exclusion_center = Vector2(0, 0)
+exclusion_radius = 35.0
+dungeon_center = Vector2(60, -40)
+dungeon_exclusion_radius = 10.0
+
+[node name="DungeonEntrance" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60, 0, -40)
+script = ExtResource("11")
+dungeon_name = "Ashfall Cavern"
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 10, 0)
