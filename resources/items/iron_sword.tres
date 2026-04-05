@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/inventory/item_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "iron_sword"
+display_name = "Iron Sword"
+description = "A sturdy iron blade. Simple but reliable."
+item_type = 0
+rarity = 0
+weight = 8.0
+value = 25
+stackable = false
+max_stack = 1
+can_drop = true
+can_use = false
+damage = 12.0
