@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://world001"]
+[gd_scene load_steps=18 format=3 uid="uid://world001"]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1"]
 [ext_resource type="Script" path="res://scripts/world/day_night_cycle.gd" id="2"]
@@ -12,11 +12,19 @@
 [ext_resource type="Script" path="res://scripts/world/environment_scatter.gd" id="10"]
 [ext_resource type="Script" path="res://scripts/world/dungeon_entrance.gd" id="11"]
 [ext_resource type="Script" path="res://scripts/world/village_npcs.gd" id="12"]
+[ext_resource type="Script" path="res://scripts/quest/herb_quest.gd" id="13"]
+[ext_resource type="Script" path="res://scripts/quest/starter_quest.gd" id="14"]
+[ext_resource type="Script" path="res://scripts/world/herb_spawner.gd" id="15"]
+[ext_resource type="Script" path="res://scripts/world/enemy_spawner.gd" id="16"]
+[ext_resource type="Script" path="res://scripts/player/combat_system.gd" id="17"]
 
 [node name="TestWorld" type="Node3D"]
 
 [node name="Player" parent="." instance=ExtResource("1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -18)
+
+[node name="CombatSystem" type="Node3D" parent="Player"]
+script = ExtResource("17")
 
 [node name="TerrainGenerator" type="Node3D" parent="."]
 script = ExtResource("8")
@@ -48,6 +56,22 @@ dungeon_exclusion_radius = 10.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60, 0, -40)
 script = ExtResource("11")
 dungeon_name = "Ashfall Cavern"
+
+[node name="HerbSpawner" type="Node3D" parent="."]
+script = ExtResource("15")
+
+[node name="EnemySpawner" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60, 0, -30)
+script = ExtResource("16")
+spawn_points = [Vector3(-5, 0, -3), Vector3(3, 0, -5), Vector3(0, 0, 2)]
+enemy_name = "Skeleton"
+enemy_id = "skeleton"
+
+[node name="HerbQuest" type="Node" parent="."]
+script = ExtResource("13")
+
+[node name="StarterQuest" type="Node" parent="."]
+script = ExtResource("14")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 10, 0)

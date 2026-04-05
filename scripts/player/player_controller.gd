@@ -28,6 +28,7 @@ signal interacted_with(target: Node3D)
 
 
 func _ready() -> void:
+	add_to_group("player")
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 

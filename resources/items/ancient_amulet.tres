@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/inventory/item_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "ancient_amulet"
+display_name = "Ancient Amulet"
+description = "A tarnished amulet pulsing with faint, dark energy. Runes of an old kingdom are etched around its rim. Elder Aldric may know its significance."
+item_type = 5
+rarity = 2
+weight = 0.3
+value = 0
+stackable = false
+max_stack = 1
+can_drop = false
+can_use = false
