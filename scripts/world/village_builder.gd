@@ -5,7 +5,15 @@ class_name VillageBuilder
 
 @export var village_name: String = "Millhaven"
 
-# Color palette
+# Shader materials (used for key surfaces)
+var stone_mat: Material = preload("res://resources/materials/stone_material.tres")
+var wood_mat: Material = preload("res://resources/materials/wood_material.tres")
+var dark_wood_mat: Material = preload("res://resources/materials/dark_wood_material.tres")
+var plaster_mat: Material = preload("res://resources/materials/plaster_material.tres")
+var roof_mat: Material = preload("res://resources/materials/roof_material.tres")
+var path_mat: Material = preload("res://resources/materials/path_material.tres")
+
+# Flat colors (used for small details, windows, water, etc.)
 var stone_color := Color(0.55, 0.52, 0.48)
 var wood_color := Color(0.45, 0.3, 0.18)
 var dark_wood_color := Color(0.3, 0.2, 0.12)
@@ -68,18 +76,18 @@ func _build_tavern(pos: Vector3) -> void:
 	add_child(building)
 
 	# Main body
-	var body := _create_box(Vector3(9, 4, 7), stone_color)
+	var body := _create_box_shader(Vector3(9, 4, 7), stone_mat)
 	body.position.y = 2
 	building.add_child(body)
 
 	# Upper floor (half-timbered)
-	var upper := _create_box(Vector3(9.5, 3, 7.5), plaster_color)
+	var upper := _create_box_shader(Vector3(9.5, 3, 7.5), plaster_mat)
 	upper.position.y = 5.5
 	building.add_child(upper)
 
 	# Timber beams on upper floor
 	for i in range(4):
-		var beam := _create_box(Vector3(0.15, 3, 7.6), dark_wood_color)
+		var beam := _create_box_shader(Vector3(0.15, 3, 7.6), dark_wood_mat)
 		beam.position = Vector3(-3.5 + i * 2.3, 5.5, 0)
 		building.add_child(beam)
 
@@ -89,7 +97,7 @@ func _build_tavern(pos: Vector3) -> void:
 	building.add_child(roof)
 
 	# Door
-	var door := _create_box(Vector3(1.2, 2.2, 0.3), door_color)
+	var door := _create_box_shader(Vector3(1.2, 2.2, 0.3), wood_mat)
 	door.position = Vector3(0, 1.1, 3.6)
 	building.add_child(door)
 
@@ -103,11 +111,11 @@ func _build_tavern(pos: Vector3) -> void:
 		building.add_child(win2)
 
 	# Tavern sign
-	var sign_post := _create_box(Vector3(0.1, 2, 0.1), dark_wood_color)
+	var sign_post := _create_box_shader(Vector3(0.1, 2, 0.1), dark_wood_mat)
 	sign_post.position = Vector3(2, 3, 3.8)
 	building.add_child(sign_post)
 
-	var sign_board := _create_box(Vector3(1.5, 0.8, 0.1), wood_color)
+	var sign_board := _create_box_shader(Vector3(1.5, 0.8, 0.1), wood_mat)
 	sign_board.position = Vector3(2, 3.8, 4.0)
 	building.add_child(sign_board)
 
@@ -125,7 +133,7 @@ func _build_blacksmith(pos: Vector3) -> void:
 	add_child(building)
 
 	# Main workshop
-	var body := _create_box(Vector3(7, 3.5, 6), stone_color)
+	var body := _create_box_shader(Vector3(7, 3.5, 6), stone_mat)
 	body.position.y = 1.75
 	building.add_child(body)
 
@@ -135,13 +143,13 @@ func _build_blacksmith(pos: Vector3) -> void:
 	building.add_child(roof)
 
 	# Open forge area (lean-to roof, no wall on one side)
-	var forge_roof := _create_box(Vector3(4, 0.2, 4), dark_wood_color)
+	var forge_roof := _create_box_shader(Vector3(4, 0.2, 4), dark_wood_mat)
 	forge_roof.position = Vector3(5.5, 3, 0)
 	building.add_child(forge_roof)
 
 	# Forge pillars
 	for z in [-1.5, 1.5]:
-		var pillar := _create_box(Vector3(0.2, 3, 0.2), dark_wood_color)
+		var pillar := _create_box_shader(Vector3(0.2, 3, 0.2), dark_wood_mat)
 		pillar.position = Vector3(7.2, 1.5, z)
 		building.add_child(pillar)
 
@@ -156,7 +164,7 @@ func _build_blacksmith(pos: Vector3) -> void:
 	building.add_child(pit)
 
 	# Door
-	var door := _create_box(Vector3(1.2, 2.2, 0.3), door_color)
+	var door := _create_box_shader(Vector3(1.2, 2.2, 0.3), wood_mat)
 	door.position = Vector3(0, 1.1, 3.1)
 	building.add_child(door)
 
@@ -170,13 +178,14 @@ func _build_house(pos: Vector3, house_name: String, wall_color: Color, size: Vec
 	building.position = pos
 	add_child(building)
 
-	# Walls
-	var body := _create_box(size, wall_color)
+	# Walls — use plaster or stone shader based on original color
+	var wall_mat_to_use: Material = plaster_mat if wall_color == plaster_color else stone_mat
+	var body := _create_box_shader(size, wall_mat_to_use)
 	body.position.y = size.y / 2
 	building.add_child(body)
 
 	# Stone foundation
-	var foundation := _create_box(Vector3(size.x + 0.2, 0.4, size.z + 0.2), stone_color)
+	var foundation := _create_box_shader(Vector3(size.x + 0.2, 0.4, size.z + 0.2), stone_mat)
 	foundation.position.y = 0.2
 	building.add_child(foundation)
 
@@ -186,7 +195,7 @@ func _build_house(pos: Vector3, house_name: String, wall_color: Color, size: Vec
 	building.add_child(roof)
 
 	# Door
-	var door := _create_box(Vector3(1.0, 2.0, 0.3), door_color)
+	var door := _create_box_shader(Vector3(1.0, 2.0, 0.3), wood_mat)
 	door.position = Vector3(0, 1.0, size.z / 2 + 0.1)
 	building.add_child(door)
 
@@ -205,8 +214,8 @@ func _build_well(pos: Vector3) -> void:
 	well.position = pos
 	add_child(well)
 
-	# Stone base (cylinder-like using octagonal approximation — use a box for simplicity)
-	var base := _create_box(Vector3(1.8, 0.9, 1.8), stone_color)
+	# Stone base
+	var base := _create_box_shader(Vector3(1.8, 0.9, 1.8), stone_mat)
 	base.position.y = 0.45
 	well.add_child(base)
 
@@ -217,12 +226,12 @@ func _build_well(pos: Vector3) -> void:
 
 	# Roof posts
 	for x in [-0.7, 0.7]:
-		var post := _create_box(Vector3(0.12, 2.0, 0.12), dark_wood_color)
+		var post := _create_box_shader(Vector3(0.12, 2.0, 0.12), dark_wood_mat)
 		post.position = Vector3(x, 1.9, 0)
 		well.add_child(post)
 
 	# Roof beam
-	var beam := _create_box(Vector3(2.0, 0.12, 0.8), dark_wood_color)
+	var beam := _create_box_shader(Vector3(2.0, 0.12, 0.8), dark_wood_mat)
 	beam.position.y = 2.9
 	well.add_child(beam)
 
@@ -242,17 +251,17 @@ func _build_gate(pos: Vector3) -> void:
 
 	# Two stone pillars
 	for x in [-2.5, 2.5]:
-		var pillar := _create_box(Vector3(0.8, 4, 0.8), stone_color)
+		var pillar := _create_box_shader(Vector3(0.8, 4, 0.8), stone_mat)
 		pillar.position = Vector3(x, 2, 0)
 		gate.add_child(pillar)
 
 		# Pillar cap
-		var cap := _create_box(Vector3(1.0, 0.3, 1.0), stone_color)
+		var cap := _create_box_shader(Vector3(1.0, 0.3, 1.0), stone_mat)
 		cap.position = Vector3(x, 4.15, 0)
 		gate.add_child(cap)
 
 	# Wooden cross beam
-	var beam := _create_box(Vector3(6, 0.4, 0.5), dark_wood_color)
+	var beam := _create_box_shader(Vector3(6, 0.4, 0.5), dark_wood_mat)
 	beam.position.y = 3.8
 	gate.add_child(beam)
 
@@ -267,13 +276,13 @@ func _build_market_stall(pos: Vector3, stall_name: String) -> void:
 	add_child(stall)
 
 	# Counter
-	var counter := _create_box(Vector3(2.5, 1.0, 1.2), wood_color)
+	var counter := _create_box_shader(Vector3(2.5, 1.0, 1.2), wood_mat)
 	counter.position.y = 0.5
 	stall.add_child(counter)
 
 	# Awning posts
 	for x in [-1.1, 1.1]:
-		var post := _create_box(Vector3(0.1, 2.5, 0.1), dark_wood_color)
+		var post := _create_box_shader(Vector3(0.1, 2.5, 0.1), dark_wood_mat)
 		post.position = Vector3(x, 1.25, -0.5)
 		stall.add_child(post)
 
@@ -296,7 +305,7 @@ func _build_fence_line(from: Vector3, to: Vector3, segments: int) -> void:
 		var pos := from.lerp(to, t)
 
 		# Post
-		var post := _create_box(Vector3(0.12, 1.2, 0.12), dark_wood_color)
+		var post := _create_box_shader(Vector3(0.12, 1.2, 0.12), dark_wood_mat)
 		post.position = pos + Vector3(0, 0.6, 0)
 		fences.add_child(post)
 
@@ -308,7 +317,7 @@ func _build_fence_line(from: Vector3, to: Vector3, segments: int) -> void:
 			var length := pos.distance_to(next_pos)
 
 			for rail_y in [0.4, 0.8]:
-				var rail := _create_box(Vector3(length, 0.08, 0.06), wood_color)
+				var rail := _create_box_shader(Vector3(length, 0.08, 0.06), wood_mat)
 				rail.position = mid + Vector3(0, rail_y, 0)
 				rail.look_at(next_pos + Vector3(0, rail_y, 0))
 				fences.add_child(rail)
@@ -361,7 +370,7 @@ func _add_path_segment(parent: Node3D, from: Vector3, to: Vector3, width: float)
 	var mid := from.lerp(to, 0.5)
 	var length := from.distance_to(to)
 
-	var path_mesh := _create_box(Vector3(width, 0.05, length), path_color)
+	var path_mesh := _create_box_shader(Vector3(width, 0.05, length), path_mat)
 	path_mesh.position = mid
 	path_mesh.look_at(to)
 	parent.add_child(path_mesh)
@@ -384,22 +393,25 @@ func _create_box(size: Vector3, color: Color) -> MeshInstance3D:
 	return inst
 
 
-func _create_roof(size: Vector3, color: Color) -> MeshInstance3D:
-	# A prism-like roof using a scaled box rotated 45 degrees
-	# For a proper roof pitch, we use a prism mesh (cylinder with 4 sides)
+func _create_box_shader(size: Vector3, material: Material) -> MeshInstance3D:
+	var mesh := BoxMesh.new()
+	mesh.size = size
+	var inst := MeshInstance3D.new()
+	inst.mesh = mesh
+	inst.material_override = material
+	return inst
+
+
+func _create_roof(size: Vector3, _color: Color) -> MeshInstance3D:
 	var mesh := CylinderMesh.new()
 	mesh.top_radius = 0.0
 	mesh.bottom_radius = size.z / 2
 	mesh.height = size.y
 	mesh.radial_segments = 4
 
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = color
-
 	var inst := MeshInstance3D.new()
 	inst.mesh = mesh
-	inst.material_override = mat
-	# Rotate so the ridge runs along X axis
+	inst.material_override = roof_mat
 	inst.scale = Vector3(size.x / size.z, 1, 1)
 	inst.rotation.y = PI / 4
 	return inst

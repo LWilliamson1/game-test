@@ -9,6 +9,7 @@ class_name DungeonEntrance
 var stone_color := Color(0.4, 0.38, 0.35)
 var dark_stone := Color(0.2, 0.18, 0.16)
 var moss_color := Color(0.2, 0.3, 0.15)
+var stone_shader_mat: Material = preload("res://resources/materials/stone_material.tres")
 
 
 func _ready() -> void:
@@ -24,22 +25,22 @@ func _build_entrance() -> void:
 
 	# Stone archway frame
 	# Left pillar
-	var left_pillar := _create_box(Vector3(1.2, 4, 1.2), dark_stone)
+	var left_pillar := _create_box_shader(Vector3(1.2, 4, 1.2), stone_shader_mat)
 	left_pillar.position = Vector3(-2.2, 2, 0)
 	add_child(left_pillar)
 
 	# Right pillar
-	var right_pillar := _create_box(Vector3(1.2, 4, 1.2), dark_stone)
+	var right_pillar := _create_box_shader(Vector3(1.2, 4, 1.2), stone_shader_mat)
 	right_pillar.position = Vector3(2.2, 2, 0)
 	add_child(right_pillar)
 
 	# Arch top
-	var arch := _create_box(Vector3(5.6, 0.8, 1.2), dark_stone)
+	var arch := _create_box_shader(Vector3(5.6, 0.8, 1.2), stone_shader_mat)
 	arch.position = Vector3(0, 4.4, 0)
 	add_child(arch)
 
 	# Keystone
-	var keystone := _create_box(Vector3(0.8, 1.0, 1.3), Color(0.5, 0.45, 0.4))
+	var keystone := _create_box_shader(Vector3(0.8, 1.0, 1.3), stone_shader_mat)
 	keystone.position = Vector3(0, 4.8, 0)
 	add_child(keystone)
 
@@ -50,7 +51,7 @@ func _build_entrance() -> void:
 
 	# Steps leading down
 	for i in range(3):
-		var step := _create_box(Vector3(4.0, 0.25, 0.8), dark_stone)
+		var step := _create_box_shader(Vector3(4.0, 0.25, 0.8), stone_shader_mat)
 		step.position = Vector3(0, -i * 0.25, 1.0 + i * 0.8)
 		add_child(step)
 
@@ -143,6 +144,15 @@ func _create_box(size: Vector3, color: Color) -> MeshInstance3D:
 	var inst := MeshInstance3D.new()
 	inst.mesh = mesh
 	inst.material_override = mat
+	return inst
+
+
+func _create_box_shader(size: Vector3, material: Material) -> MeshInstance3D:
+	var mesh := BoxMesh.new()
+	mesh.size = size
+	var inst := MeshInstance3D.new()
+	inst.mesh = mesh
+	inst.material_override = material
 	return inst
 
 

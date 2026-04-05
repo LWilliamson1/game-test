@@ -1,0 +1,14 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://resources/materials/stone.gdshader" id="1"]
+
+[resource]
+shader = ExtResource("1")
+shader_parameter/stone_color_1 = Vector3(0.50, 0.48, 0.44)
+shader_parameter/stone_color_2 = Vector3(0.58, 0.55, 0.50)
+shader_parameter/mortar_color = Vector3(0.65, 0.62, 0.55)
+shader_parameter/brick_scale_x = 4.0
+shader_parameter/brick_scale_y = 8.0
+shader_parameter/mortar_width = 0.05
+shader_parameter/roughness_base = 0.9
+shader_parameter/normal_strength = 0.6

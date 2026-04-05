@@ -1,0 +1,15 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://resources/materials/wood.gdshader" id="1"]
+
+[resource]
+shader = ExtResource("1")
+shader_parameter/wood_color_light = Vector3(0.35, 0.22, 0.12)
+shader_parameter/wood_color_dark = Vector3(0.20, 0.12, 0.06)
+shader_parameter/grain_scale = 10.0
+shader_parameter/ring_frequency = 18.0
+shader_parameter/ring_noise = 2.5
+shader_parameter/plank_count = 3.0
+shader_parameter/plank_gap_width = 0.02
+shader_parameter/roughness_base = 0.8
+shader_parameter/normal_strength = 0.5

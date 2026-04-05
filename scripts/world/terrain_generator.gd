@@ -19,7 +19,7 @@ class_name TerrainGenerator
 @export var village_falloff: float = 15.0
 
 @export_group("Material")
-@export var terrain_material: Material
+@export var terrain_material: Material = preload("res://resources/materials/terrain_material.tres")
 
 var noise: FastNoiseLite
 var mesh_instance: MeshInstance3D
